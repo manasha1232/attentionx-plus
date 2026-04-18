@@ -188,7 +188,19 @@ attentionx-plus/
 ```
 
 ---
+## 🚀 Demo Preview
 
+### 🔥 Landing Page
+![Hero](assets/hero.png)
+
+### ❌ Problem with Existing Systems
+![Problem](assets/problem.png)
+
+### ⚙️ How It Works
+![Pipeline](assets/pipeline.png)
+
+### ✨ Before vs After Personalization
+![Comparison](assets/before_after.png)
 ## Using the UserStyleVector in Your Own Code
 
 ```python
