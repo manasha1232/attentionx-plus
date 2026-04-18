@@ -1,6 +1,8 @@
 # AttentionX+ — Personalized Content Repurposing Engine
+
 ## 🎥 Demo Video
-Watch here: https://1drv.ms/v/c/ff26221cd6f413b8/IQAfoObPO4ocQJ-Y-icJqRpuAYe2Z-2PpfOd89JAkH6rcQc?e=eHBDNj
+[▶ Watch Demo](https://1drv.ms/v/c/ff26221cd6f413b8/IQAfoObPO4ocQJ-Y-icJqRpuAYe2Z-2PpfOd89JAkH6rcQc?e=eHBDNj)
+*This demo showcases how user style is learned from sample text and applied to transform raw transcripts into personalized captions. The system captures tone, slang, and phrasing patterns, enabling realistic style adaptation with minimal input data.*
 
 
 ## The Problem
