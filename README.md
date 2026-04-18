@@ -1,5 +1,6 @@
 # AttentionX+ — Personalized Content Repurposing Engine
-
+## 🎥 Demo Video
+Watch here: https://1drv.ms/v/c/ff26221cd6f413b8/IQAfoObPO4ocQJ-Y-icJqRpuAYe2Z-2PpfOd89JAkH6rcQc?e=eHBDNj
 
 
 ## The Problem
@@ -203,7 +204,9 @@ attentionx-plus/
 ![Comparison](assets/before_after.png)
 
 
-Uploading AttentionX+ _ Personalized Content Repurposing Engine - Google Chrome 2026-04-18 17-32-13.mp4…
+
+
+
 
 
 ## Using the UserStyleVector in Your Own Code
