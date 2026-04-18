@@ -14,7 +14,7 @@ from fastapi.requests import Request
 from fastapi.responses import JSONResponse, FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 
-from pipeline.asr import transcribe_video
+# from pipeline.asr import transcribe_video
 from pipeline.style_vector import build_user_style_vector, get_style_keywords
 from pipeline.highlight_detector import detect_highlights
 from pipeline.caption_rewriter import rewrite_caption
