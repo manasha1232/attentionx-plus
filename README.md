@@ -201,6 +201,11 @@ attentionx-plus/
 
 ### ✨ Before vs After Personalization
 ![Comparison](assets/before_after.png)
+
+
+Uploading AttentionX+ _ Personalized Content Repurposing Engine - Google Chrome 2026-04-18 17-32-13.mp4…
+
+
 ## Using the UserStyleVector in Your Own Code
 
 ```python
