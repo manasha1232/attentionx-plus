@@ -1,9 +1,6 @@
 # AttentionX+ — Personalized Content Repurposing Engine
 
-> **AttentionX 2025 Hackathon Submission**
-> Built on peer-reviewed research: *"Capturing User Linguistic Identity for Incremental Language Model Personalization"*
 
----
 
 ## The Problem
 
