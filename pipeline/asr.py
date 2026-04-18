@@ -76,3 +76,5 @@
 #         "segments": segments,
 #         "language": result.get("language", "en"),
 #     }
+def transcribe_video(video_path):
+    return "This is a dummy ASR transcript (Whisper disabled for demo)"
