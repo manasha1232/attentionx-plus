@@ -254,22 +254,6 @@ To fine-tune your own local model:
 
 ---
 
-## Research Reference
-
-This prototype implements the framework from:
-
-> **Capturing User Linguistic Identity for Incremental Language Model Personalization**
-> Manasha Pavithra J, G Bhagyashri, Radhamani A S
-> Department of AI & Data Science, Amrita Vishwa Vidyapeetham, Nagercoil Campus
-
-Key contributions implemented:
-- UserStyleVector construction via mean-pooled SBERT embeddings
-- Active learning incremental update loop
-- Ablation-validated mean pooling strategy
-- Multilingual encoder for code-mixed user populations
-- WER-evaluated ASR post-processing layer
-
----
 
 ## License
 
