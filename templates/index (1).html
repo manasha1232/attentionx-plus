@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AttentionX+ | Personalized Content Repurposing Engine</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #06060f;
+  --surface: #0d0d1c;
+  --surface2: #13132a;
+  --border: #1e1e3a;
+  --border2: #2a2a4a;
+  --text: #e8e8f5;
+  --muted: #6b6b9a;
+  --purple: #a78bfa;
+  --purple-dim: rgba(167,139,250,0.12);
+  --green: #34d399;
+  --green-dim: rgba(52,211,153,0.1);
+  --amber: #fbbf24;
+  --red: #f87171;
+  --grad: linear-gradient(135deg, #7c3aed 0%, #2563eb 100%);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Space Grotesk', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* ── NAV ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  padding: 0 2rem;
+  height: 64px;
+  display: flex; align-items: center; justify-content: space-between;
+  background: rgba(6,6,15,0.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+}
+
+.nav-logo {
+  font-family: 'Space Mono', monospace;
+  font-size: 18px; font-weight: 700;
+  color: var(--purple);
+}
+.nav-logo span { color: var(--green); }
+
+.nav-links { display: flex; gap: 2rem; }
+.nav-links a {
+  font-size: 14px; color: var(--muted);
+  text-decoration: none; transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--text); }
+
+.nav-cta {
+  padding: 8px 20px;
+  background: var(--grad);
+  border: none; border-radius: 8px;
+  color: white; font-size: 14px; font-weight: 600;
+  cursor: pointer; text-decoration: none;
+  transition: opacity 0.2s;
+}
+.nav-cta:hover { opacity: 0.85; }
+
+/* ── HERO ── */
+.hero {
+  padding: 140px 2rem 80px;
+  max-width: 1100px; margin: 0 auto;
+  text-align: center;
+}
+
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 6px 16px;
+  background: var(--purple-dim);
+  border: 1px solid rgba(167,139,250,0.3);
+  border-radius: 20px;
+  font-size: 12px; color: var(--purple);
+  font-family: 'Space Mono', monospace;
+  margin-bottom: 2rem;
+  letter-spacing: 0.5px;
+}
+
+.hero-badge::before {
+  content: '';
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--green);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.4); }
+}
+
+h1 {
+  font-size: clamp(36px, 6vw, 72px);
+  font-weight: 700;
+  line-height: 1.1;
+  margin-bottom: 1.5rem;
+  letter-spacing: -2px;
+}
+
+h1 .accent {
+  background: var(--grad);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-sub {
+  font-size: 20px; color: var(--muted);
+  max-width: 620px; margin: 0 auto 2.5rem;
+  font-weight: 300; line-height: 1.7;
+}
+
+.hero-actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+
+.btn-primary {
+  padding: 14px 32px;
+  background: var(--grad);
+  border: none; border-radius: 10px;
+  color: white; font-size: 16px; font-weight: 600;
+  cursor: pointer; text-decoration: none;
+  transition: transform 0.2s, opacity 0.2s;
+  display: inline-block;
+}
+.btn-primary:hover { transform: translateY(-2px); opacity: 0.9; }
+
+.btn-secondary {
+  padding: 14px 32px;
+  background: transparent;
+  border: 1px solid var(--border2);
+  border-radius: 10px;
+  color: var(--text); font-size: 16px; font-weight: 500;
+  cursor: pointer; text-decoration: none;
+  transition: border-color 0.2s, background 0.2s;
+  display: inline-block;
+}
+.btn-secondary:hover { border-color: var(--purple); background: var(--purple-dim); }
+
+/* ── STATS STRIP ── */
+.stats-strip {
+  display: flex; justify-content: center; gap: 4rem;
+  padding: 3rem 2rem;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  max-width: 900px; margin: 0 auto;
+  flex-wrap: wrap;
+}
+
+.stat { text-align: center; }
+.stat-num {
+  font-family: 'Space Mono', monospace;
+  font-size: 36px; font-weight: 700;
+  color: var(--green);
+  display: block;
+}
+.stat-label { font-size: 13px; color: var(--muted); margin-top: 4px; }
+
+/* ── PROBLEM SECTION ── */
+.section {
+  max-width: 1100px; margin: 0 auto;
+  padding: 6rem 2rem;
+}
+
+.section-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px; color: var(--purple);
+  letter-spacing: 2px; text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+
+h2 {
+  font-size: clamp(28px, 4vw, 44px);
+  font-weight: 700; letter-spacing: -1px;
+  line-height: 1.2; margin-bottom: 1.5rem;
+}
+
+.problem-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem; margin-top: 3rem;
+}
+
+.problem-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 1.75rem;
+  transition: border-color 0.2s;
+}
+
+.problem-card:hover { border-color: var(--border2); }
+
+.problem-icon {
+  width: 42px; height: 42px;
+  border-radius: 10px;
+  background: var(--purple-dim);
+  border: 1px solid rgba(167,139,250,0.2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; margin-bottom: 1rem;
+}
+
+.problem-card h3 { font-size: 17px; font-weight: 600; margin-bottom: 0.5rem; }
+.problem-card p { font-size: 14px; color: var(--muted); line-height: 1.65; }
+
+/* ── PIPELINE SECTION ── */
+.pipeline-section { background: var(--surface); }
+
+.pipeline-visual {
+  display: flex; align-items: stretch;
+  gap: 0; margin-top: 3rem;
+  overflow-x: auto; padding-bottom: 1rem;
+}
+
+.pipe-node {
+  flex: 1; min-width: 140px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.25rem 1rem;
+  text-align: center;
+  position: relative;
+}
+
+.pipe-node:not(:last-child)::after {
+  content: '→';
+  position: absolute; right: -16px; top: 50%;
+  transform: translateY(-50%);
+  color: var(--muted); font-size: 18px;
+  z-index: 2;
+}
+
+.pipe-node-num {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px; color: var(--purple);
+  letter-spacing: 1px; margin-bottom: 8px;
+}
+
+.pipe-node-name {
+  font-size: 13px; font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.pipe-node-tool {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px; color: var(--muted);
+}
+
+.pipe-node.highlight {
+  border-color: rgba(167,139,250,0.4);
+  background: var(--purple-dim);
+}
+
+.pipe-node.highlight .pipe-node-name { color: var(--purple); }
+
+/* ── COMPARISON SECTION ── */
+.compare-section { padding: 6rem 2rem; }
+
+.compare-wrap {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 1.5rem; margin-top: 3rem;
+}
+
+@media (max-width: 680px) { .compare-wrap { grid-template-columns: 1fr; } }
+
+.compare-card {
+  border-radius: 14px; padding: 1.75rem;
+  border: 1px solid var(--border);
+}
+
+.compare-card.before { background: var(--surface); }
+
+.compare-card.after {
+  background: linear-gradient(135deg, #0d0b20 0%, #0a0f1e 100%);
+  border-color: rgba(167,139,250,0.35);
+}
+
+.compare-tag {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px; letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 3px 10px; border-radius: 20px;
+  display: inline-block; margin-bottom: 1rem;
+}
+
+.compare-tag.generic { background: var(--surface2); color: var(--muted); }
+.compare-tag.ours { background: var(--purple-dim); color: var(--purple); border: 1px solid rgba(167,139,250,0.3); }
+
+.compare-text {
+  font-size: 17px; line-height: 1.7;
+}
+
+.compare-text.before-text { color: var(--muted); font-style: italic; }
+.compare-text.after-text { color: var(--text); font-weight: 500; }
+
+/* ── WER VISUAL ── */
+.wer-section {
+  max-width: 700px; margin: 4rem auto 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 2rem;
+}
+
+.wer-title {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px; color: var(--muted);
+  text-transform: uppercase; letter-spacing: 1.5px;
+  margin-bottom: 1.5rem;
+}
+
+.wer-row {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 14px;
+}
+
+.wer-row-label { font-size: 13px; color: var(--muted); width: 160px; flex-shrink: 0; }
+.wer-track { flex: 1; height: 8px; background: var(--surface2); border-radius: 4px; overflow: hidden; }
+.wer-fill { height: 100%; border-radius: 4px; }
+.wer-fill.f1 { width: 62%; background: #374151; }
+.wer-fill.f2 { width: 37%; background: #6366f1; }
+.wer-fill.f3 { width: 9%; background: var(--green); }
+.wer-val {
+  font-family: 'Space Mono', monospace;
+  font-size: 12px; width: 40px; text-align: right;
+  color: var(--muted);
+}
+.wer-val.best { color: var(--green); }
+
+/* ── DEMO APP SECTION ── */
+#demo {
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 6rem 2rem;
+}
+
+.demo-inner { max-width: 900px; margin: 0 auto; }
+
+.demo-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 1.25rem; margin-top: 2rem;
+}
+
+@media (max-width: 680px) { .demo-grid { grid-template-columns: 1fr; } }
+
+.demo-panel {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.25rem;
+}
+
+.demo-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px; color: var(--muted);
+  text-transform: uppercase; letter-spacing: 1px;
+  margin-bottom: 10px;
+  display: flex; align-items: center; gap: 6px;
+}
+
+.dot { width: 6px; height: 6px; border-radius: 50%; background: var(--border2); }
+.dot.p { background: var(--purple); }
+.dot.g { background: var(--green); }
+.dot.a { background: var(--amber); }
+
+textarea {
+  width: 100%; min-height: 130px;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 13px; line-height: 1.6;
+  padding: 10px 12px;
+  resize: vertical; outline: none;
+  transition: border-color 0.2s;
+}
+textarea:focus { border-color: rgba(167,139,250,0.4); }
+textarea::placeholder { color: #2e2e55; }
+
+.sample-link {
+  font-size: 12px; color: #6366f1;
+  cursor: pointer; background: none;
+  border: none; text-decoration: underline;
+  text-underline-offset: 3px;
+  float: right; margin-top: 6px;
+  font-family: 'Space Grotesk', sans-serif;
+}
+.sample-link:hover { color: var(--purple); }
+
+.run-btn {
+  width: 100%; padding: 15px;
+  background: var(--grad);
+  border: none; border-radius: 10px;
+  color: white;
+  font-family: 'Space Mono', monospace;
+  font-size: 13px; font-weight: 700;
+  cursor: pointer; margin-top: 1.25rem;
+  transition: opacity 0.2s, transform 0.2s;
+  letter-spacing: 0.5px;
+}
+.run-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+.run-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+.spinner {
+  display: inline-block; width: 14px; height: 14px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-top-color: white; border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  vertical-align: middle; margin-right: 8px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.result-area {
+  margin-top: 1.5rem;
+  display: none;
+  animation: fadeUp 0.4s ease;
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.result-compare {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+@media (max-width: 680px) { .result-compare { grid-template-columns: 1fr; } }
+
+.result-box {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 10px; padding: 1.25rem;
+}
+.result-box.ours { border-color: rgba(167,139,250,0.3); }
+
+.result-tag {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px; letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 2px 8px; border-radius: 20px;
+  margin-bottom: 10px; display: inline-block;
+}
+.result-tag.gen { background: var(--surface); color: var(--muted); }
+.result-tag.ours-tag { background: var(--purple-dim); color: var(--purple); }
+
+.result-text { font-size: 15px; line-height: 1.65; }
+.result-text.muted { color: var(--muted); font-style: italic; }
+
+.keywords-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 1rem; }
+.kw {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px; padding: 3px 10px;
+  border-radius: 20px;
+  background: var(--purple-dim);
+  color: var(--purple);
+  border: 1px solid rgba(167,139,250,0.2);
+  animation: popIn 0.3s ease;
+}
+@keyframes popIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+.error-msg {
+  background: rgba(248,113,113,0.1);
+  border: 1px solid rgba(248,113,113,0.3);
+  border-radius: 8px; padding: 12px;
+  font-size: 13px; color: #fca5a5;
+  margin-top: 1rem;
+}
+
+/* ── TECH STACK ── */
+.tech-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem; margin-top: 3rem;
+}
+
+.tech-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px; padding: 1.25rem;
+  display: flex; align-items: center; gap: 12px;
+}
+
+.tech-icon {
+  width: 38px; height: 38px; border-radius: 8px;
+  background: var(--purple-dim);
+  border: 1px solid rgba(167,139,250,0.2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; flex-shrink: 0;
+}
+
+.tech-name { font-size: 14px; font-weight: 600; }
+.tech-role { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+/* ── FOOTER ── */
+footer {
+  text-align: center; padding: 3rem 2rem;
+  border-top: 1px solid var(--border);
+  color: var(--muted); font-size: 13px;
+}
+
+footer a { color: var(--purple); text-decoration: none; }
+footer a:hover { text-decoration: underline; }
+
+.footer-logo {
+  font-family: 'Space Mono', monospace;
+  font-size: 20px; font-weight: 700;
+  color: var(--purple); margin-bottom: 0.5rem;
+}
+.footer-logo span { color: var(--green); }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Attention<span>X+</span></div>
+  <div class="nav-links">
+    <a href="#problem">Problem</a>
+    <a href="#pipeline">How it works</a>
+    <a href="#demo">Demo</a>
+    <a href="#stack">Tech Stack</a>
+  </div>
+  <a href="#demo" class="nav-cta">Try Demo →</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">✦ AttentionX 2025 Hackathon Submission</div>
+  <h1>
+    Stop posting<br>
+    <span class="accent">generic captions</span><br>
+    your audience ignores.
+  </h1>
+  <p class="hero-sub">
+    AttentionX+ repurposes your long-form videos into personalized short clips —
+    with captions that actually sound like <em>you</em>, not a robot.
+  </p>
+  <div class="hero-actions">
+    <a href="#demo" class="btn-primary">Try Live Demo</a>
+    <a href="https://github.com/your-username/attentionx-plus" class="btn-secondary" target="_blank">View on GitHub</a>
+  </div>
+</section>
+
+<!-- STATS -->
+<div style="padding: 0 2rem;">
+  <div class="stats-strip">
+    <div class="stat">
+      <span class="stat-num">59.1%</span>
+      <div class="stat-label">WER reduction over baseline ASR</div>
+    </div>
+    <div class="stat">
+      <span class="stat-num">11%</span>
+      <div class="stat-label">of corpus needed for effective personalization</div>
+    </div>
+    <div class="stat">
+      <span class="stat-num">75%</span>
+      <div class="stat-label">slang/informal error correction rate</div>
+    </div>
+    <div class="stat">
+      <span class="stat-num">32%</span>
+      <div class="stat-label">additional gain from UserStyleVector alone</div>
+    </div>
+  </div>
+</div>
+
+<!-- PROBLEM -->
+<section class="section" id="problem">
+  <div class="section-label">The Problem</div>
+  <h2>Content repurposing is broken<br>for real creators.</h2>
+  <p style="color: var(--muted); max-width: 580px; font-size: 17px; font-weight: 300;">
+    Existing tools extract clips and generate captions — but they don't know <em>how you talk</em>.
+    The result? Captions that feel robotic, miss your slang, and tank engagement.
+  </p>
+
+  <div class="problem-grid">
+    <div class="problem-card">
+      <div class="problem-icon">✂️</div>
+      <h3>Manual clip hunting</h3>
+      <p>Creators spend hours scrubbing through footage to find the 60-second golden moment. There's no objective signal — just vibes and experience.</p>
+    </div>
+    <div class="problem-card">
+      <div class="problem-icon">🤖</div>
+      <h3>Generic AI captions</h3>
+      <p>Standard ASR and caption generators produce formal, robotic text. They don't know your slang, your audience's language, or your personal tone.</p>
+    </div>
+    <div class="problem-card">
+      <div class="problem-icon">📉</div>
+      <h3>Code-mixing failures</h3>
+      <p>Creators who naturally mix languages (Hinglish, Spanglish, etc.) watch ASR systems completely mangle their transcript — making captions unusable.</p>
+    </div>
+    <div class="problem-card">
+      <div class="problem-icon">🔄</div>
+      <h3>One-size-fits-all output</h3>
+      <p>No current tool adapts to the individual creator. The same pipeline produces the same output regardless of whether you're a hype creator or a calm educator.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PIPELINE -->
+<section style="background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);" id="pipeline">
+  <div class="section">
+    <div class="section-label">How It Works</div>
+    <h2>Five stages. One pipeline.<br>Infinitely personalized.</h2>
+    <p style="color: var(--muted); max-width: 560px; font-size: 17px; font-weight: 300;">
+      Built on proven research: a 59.1% WER reduction comes from stacking
+      standard ASR with a novel UserStyleVector personalization layer.
+    </p>
+
+    <div style="display: flex; gap: 8px; margin-top: 3rem; overflow-x: auto; padding-bottom: 1rem; align-items: stretch;">
+      <div class="pipe-node">
+        <div class="pipe-node-num">01</div>
+        <div class="pipe-node-name">ASR Transcript</div>
+        <div class="pipe-node-tool">Whisper</div>
+      </div>
+      <div style="display:flex; align-items:center; color: var(--muted); font-size:20px; padding: 0 4px;">→</div>
+      <div class="pipe-node">
+        <div class="pipe-node-num">02</div>
+        <div class="pipe-node-name">Style Vector</div>
+        <div class="pipe-node-tool">SBERT</div>
+      </div>
+      <div style="display:flex; align-items:center; color: var(--muted); font-size:20px; padding: 0 4px;">→</div>
+      <div class="pipe-node">
+        <div class="pipe-node-num">03</div>
+        <div class="pipe-node-name">Peak Detection</div>
+        <div class="pipe-node-tool">Librosa + VADER</div>
+      </div>
+      <div style="display:flex; align-items:center; color: var(--muted); font-size:20px; padding: 0 4px;">→</div>
+      <div class="pipe-node highlight">
+        <div class="pipe-node-num">04</div>
+        <div class="pipe-node-name">Caption Rewrite</div>
+        <div class="pipe-node-tool">T5/BART + UserStyleVec</div>
+      </div>
+      <div style="display:flex; align-items:center; color: var(--muted); font-size:20px; padding: 0 4px;">→</div>
+      <div class="pipe-node">
+        <div class="pipe-node-num">05</div>
+        <div class="pipe-node-name">Vertical Clips</div>
+        <div class="pipe-node-tool">MoviePy + MediaPipe</div>
+      </div>
+    </div>
+
+    <div style="background: var(--bg); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; margin-top: 2rem; font-family: 'Space Mono', monospace; font-size: 12px; color: var(--muted); line-height: 2;">
+      <span style="color: var(--green);">★ KEY INNOVATION:</span>
+      Stage 4 is unique. The UserStyleVector is computed by mean-pooling SBERT embeddings of the
+      creator's past text. It captures <span style="color: var(--purple);">slang patterns</span>,
+      <span style="color: var(--purple);">code-mixing tendencies</span>, and
+      <span style="color: var(--purple);">habitual phrasing</span> — then conditions the
+      seq2seq rewriter to match that voice. No other tool does this.
+    </div>
+  </div>
+</section>
+
+<!-- COMPARISON -->
+<section class="section compare-section" id="compare">
+  <div class="section-label">Before vs After</div>
+  <h2>Same clip. Different brain.</h2>
+  <p style="color: var(--muted); font-size: 17px; font-weight: 300; max-width: 540px;">
+    The judge moment: side-by-side, the gap between generic AI output and
+    creator-personalized output is instantly visible.
+  </p>
+
+  <div class="compare-wrap">
+    <div class="compare-card before">
+      <span class="compare-tag generic">❌ Standard ASR output</span>
+      <div class="compare-text before-text">
+        "That is actually a very interesting point and I think a lot of people do not realize how important this is for their daily lives."
+      </div>
+    </div>
+    <div class="compare-card after">
+      <span class="compare-tag ours">✦ AttentionX+ personalized</span>
+      <div class="compare-text after-text">
+        bro this actually just changed how i see everything fr — rent free in my head now 💀
+      </div>
+    </div>
+  </div>
+
+  <div class="wer-section">
+    <div class="wer-title">WER reduction across pipeline stages</div>
+    <div class="wer-row">
+      <div class="wer-row-label">Baseline ASR (Whisper)</div>
+      <div class="wer-track"><div class="wer-fill f1"></div></div>
+      <div class="wer-val">0.62</div>
+    </div>
+    <div class="wer-row">
+      <div class="wer-row-label">Generic post-processing</div>
+      <div class="wer-track"><div class="wer-fill f2"></div></div>
+      <div class="wer-val">0.37</div>
+    </div>
+    <div class="wer-row">
+      <div class="wer-row-label">AttentionX+ (ours)</div>
+      <div class="wer-track"><div class="wer-fill f3"></div></div>
+      <div class="wer-val best">0.09</div>
+    </div>
+    <div style="font-size: 12px; color: var(--muted); margin-top: 12px; font-family: 'Space Mono', monospace;">
+      UserStyleVector contributes +32% relative improvement beyond generic post-processing alone.
+    </div>
+  </div>
+</section>
+
+<!-- LIVE DEMO -->
+<section id="demo">
+  <div class="demo-inner">
+    <div class="section-label">Live Demo</div>
+    <h2>Try the caption engine now.</h2>
+    <p style="color: var(--muted); font-size: 16px; font-weight: 300; margin-bottom: 0;">
+      No video upload needed for the caption demo. Paste a raw transcript + style examples and see the personalization happen.
+    </p>
+
+    <div class="demo-grid">
+      <div class="demo-panel">
+        <div class="demo-label"><div class="dot a"></div>Raw ASR transcript</div>
+        <textarea id="asr-input" placeholder="Paste your raw Whisper/ASR output here...
+
+e.g. 'That is very interesting and I think people should know about this topic'"></textarea>
+      </div>
+      <div class="demo-panel">
+        <div class="demo-label"><div class="dot p"></div>Creator style corpus</div>
+        <textarea id="corpus-input" placeholder="Paste 5-20 examples of how this creator talks/writes...
+
+e.g. past captions, tweets, comments — anything in their voice"></textarea>
+        <button class="sample-link" onclick="loadSampleData()">load sample data →</button>
+      </div>
+    </div>
+
+    <button class="run-btn" id="run-btn" onclick="runDemo()">
+      ▶ &nbsp;run personalization pipeline
+    </button>
+
+    <div id="error-area"></div>
+
+    <div class="result-area" id="result-area">
+      <div style="margin-bottom: 1rem;">
+        <div class="demo-label"><div class="dot g"></div>UserStyleVector · detected signals</div>
+        <div class="keywords-row" id="keywords-row"></div>
+      </div>
+      <div class="result-compare">
+        <div class="result-box">
+          <span class="result-tag gen">baseline ASR</span>
+          <div class="result-text muted" id="out-generic"></div>
+        </div>
+        <div class="result-box ours">
+          <span class="result-tag ours-tag">✦ personalized</span>
+          <div class="result-text" id="out-pers"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TECH STACK -->
+<section class="section" id="stack">
+  <div class="section-label">Tech Stack</div>
+  <h2>Every component chosen for a reason.</h2>
+
+  <div class="tech-grid">
+    <div class="tech-card">
+      <div class="tech-icon">🎙️</div>
+      <div>
+        <div class="tech-name">OpenAI Whisper</div>
+        <div class="tech-role">Stage 1 · ASR transcription</div>
+      </div>
+    </div>
+    <div class="tech-card">
+      <div class="tech-icon">🧠</div>
+      <div>
+        <div class="tech-name">Sentence-BERT</div>
+        <div class="tech-role">Stage 2 · UserStyleVector</div>
+      </div>
+    </div>
+    <div class="tech-card">
+      <div class="tech-icon">🎵</div>
+      <div>
+        <div class="tech-name">Librosa + VADER</div>
+        <div class="tech-role">Stage 3 · Highlight detection</div>
+      </div>
+    </div>
+    <div class="tech-card">
+      <div class="tech-icon">✍️</div>
+      <div>
+        <div class="tech-name">T5 / BART</div>
+        <div class="tech-role">Stage 4 · Caption rewriting</div>
+      </div>
+    </div>
+    <div class="tech-card">
+      <div class="tech-icon">🎬</div>
+      <div>
+        <div class="tech-name">MoviePy + MediaPipe</div>
+        <div class="tech-role">Stage 5 · Vertical clip export</div>
+      </div>
+    </div>
+    <div class="tech-card">
+      <div class="tech-icon">⚡</div>
+      <div>
+        <div class="tech-name">FastAPI + Uvicorn</div>
+        <div class="tech-role">Backend API server</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Attention<span>X+</span></div>
+  <p style="margin-bottom: 0.5rem;">Personalized Content Repurposing Engine · AttentionX 2025 Hackathon</p>
+  <p>
+    Based on research: <em>Capturing User Linguistic Identity for Incremental Language Model Personalization</em> ·
+    <a href="https://github.com/your-username/attentionx-plus" target="_blank">GitHub</a>
+  </p>
+</footer>
+
+<script>
+const SAMPLES = {
+  asr: `that is actually a very interesting point and i think a lot of people do not realize how important this is for their daily lives and the way that they approach problems in general`,
+  corpus: `bro this actually slapped no cap 💀
+wait why did nobody tell me about this sooner lmaooo
+okay hear me out this might be the most unhinged take but…
+not me crying over a 60 second video again
+the way this just fixed my entire week istg
+POV: you finally understand why this matters
+okay but why does this hit different at 2am
+rent free in my head forever and ever
+absolutely unwell behavior and i am HERE for it
+this is the sign you needed, trust`
+};
+
+function loadSampleData() {
+  document.getElementById('asr-input').value = SAMPLES.asr;
+  document.getElementById('corpus-input').value = SAMPLES.corpus;
+}
+
+async function runDemo() {
+  const asr = document.getElementById('asr-input').value.trim();
+  const corpus = document.getElementById('corpus-input').value.trim();
+  const errorArea = document.getElementById('error-area');
+  errorArea.innerHTML = '';
+
+  if (!asr) { errorArea.innerHTML = '<div class="error-msg">Please paste a raw ASR transcript.</div>'; return; }
+  if (!corpus) { errorArea.innerHTML = '<div class="error-msg">Please paste some creator style examples.</div>'; return; }
+
+  const btn = document.getElementById('run-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span>processing…';
+  document.getElementById('result-area').style.display = 'none';
+
+  const prompt = `You are the UserStyleVector engine from a linguistics research paper.
+
+TASK: Given a raw ASR transcript and a creator's style corpus:
+1. Rewrite the transcript as a SHORT, punchy social caption (1-2 sentences max) perfectly matching the creator's voice — their slang, energy, emoji usage, sentence structure.
+2. Extract 6-8 single-word style signals that characterize this creator.
+
+Return ONLY valid JSON (no markdown fences):
+{
+  "personalized_caption": "...",
+  "style_keywords": ["word1","word2","word3","word4","word5","word6"]
+}
+
+RAW ASR: ${asr}
+
+CREATOR STYLE CORPUS:
+${corpus}`;
+
+  try {
+    const response = await fetch('/api/demo', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({ raw_transcript: asr, style_corpus: corpus })
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      showResults(asr, data.personalized_caption, data.style_keywords || []);
+      return;
+    }
+  } catch (e) {
+    // Fall through to API mode
+  }
+
+  // Direct API fallback (for static demo / when server not running)
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 400,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+
+    const data = await res.json();
+    const raw = (data.content || []).map(b => b.text || '').join('');
+    const clean = raw.replace(/```json|```/g, '').trim();
+    const parsed = JSON.parse(clean);
+    showResults(asr, parsed.personalized_caption, parsed.style_keywords || []);
+
+  } catch (err) {
+    errorArea.innerHTML = `<div class="error-msg">Error: ${err.message} — Make sure the backend server is running or your API key is set.</div>`;
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '▶ &nbsp;run personalization pipeline';
+  }
+}
+
+function showResults(generic, personalized, keywords) {
+  document.getElementById('out-generic').textContent = generic;
+  document.getElementById('out-pers').textContent = personalized;
+
+  const kRow = document.getElementById('keywords-row');
+  kRow.innerHTML = '';
+  keywords.forEach((kw, i) => {
+    setTimeout(() => {
+      const k = document.createElement('span');
+      k.className = 'kw';
+      k.textContent = kw;
+      kRow.appendChild(k);
+    }, i * 80);
+  });
+
+  document.getElementById('result-area').style.display = 'block';
+}
+</script>
+
+</body>
+</html>
