@@ -31,7 +31,7 @@ imageio-ffmpeg==0.4.9
 Pillow>=10.0.0
 
 # ── Face Detection for Smart Crop (Stage 5) ───────────────────────────────────
-mediapipe==0.10.11
+mediapipe
 opencv-python-headless==4.9.0.80
 
 # ── Anthropic API (caption rewriting fallback) ────────────────────────────────
