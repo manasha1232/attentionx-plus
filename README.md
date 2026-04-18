@@ -194,7 +194,7 @@ attentionx-plus/
 ![Hero](assets/hero.png)
 
 ### ❌ Problem with Existing Systems
-![Problem](assets/problem.png)
+![Problem](assets/problem_statement.png)
 
 ### ⚙️ How It Works
 ![Pipeline](assets/pipeline.png)
